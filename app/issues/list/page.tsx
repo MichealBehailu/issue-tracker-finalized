@@ -1,29 +1,31 @@
 import { Link } from "@/app/components/index";
+import { Issue, Status } from "@/generated/prisma/client";
 import { prisma } from "@/prisma/client";
-import { Button, Table } from "@radix-ui/themes";
+import { Table } from "@radix-ui/themes";
 import IssueStatusBatch from "../../components/IssueStatusBatch";
 import IssueAction from "./IssueAction";
 //import { Issue, Status } from "@prisma/client";
 //import delay from "delay";
 
-import { Status, Issue } from "@prisma/client";
 
 interface Props {
   searchParams: Promise<{ status: Status }>;
 }
 
-const IssuesPage = async ({ searchParams }: Props) => {
-  const statuses = Object.values(Status); //when all comes here we know that all is not in status enum so the prisma will make it undefined and get all status
-  const status = statuses.includes((await searchParams).status)
-    ? (await searchParams).status
+async function IssuesPage ({ searchParams: sp }: Props) {
+const searchParams = await sp;
+   const status = Object.values(Status).includes(searchParams.status)
+    ? searchParams.status
     : undefined;
+  // const {status} = await searchParams
+  // const status = statuses.includes((await searchParams).status)
+  //   ? (await searchParams).status
+  //   : undefined;
+
 
   const issues = await prisma.issue.findMany({
-    //if the status is set undefined from the above condition then prisma will do nothing it fecth all status
-    where: { status: status }, //can be set to undefined then get all status means all issues
-  }); //getting the issues from the database
-  // await delay(2000); //2 second //just to check the loading skeleton working or not
-
+    where: { status: status }
+  }); 
   const columns: { label: string; value: keyof Issue; className?: string }[] = [
     //this is a logic just to map the header part of the table
     { label: "Issue", value: "title" },

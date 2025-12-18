@@ -1,19 +1,20 @@
-import { NextAuthOptions } from "next-auth";
+import { randomUUID } from "crypto";
 import GoogleProvider from "next-auth/providers/google";
-import { PrismaAdapter } from "@next-auth/prisma-adapter"
-import {prisma} from "@/prisma/client";
 
-const authOptions : NextAuthOptions ={
-     adapter: PrismaAdapter(prisma),
+const authOptions = {
+    //  adapter: PrismaAdapter(prisma),
   providers : [
     GoogleProvider({
     clientId: process.env.GOOGLE_CLIENT_ID!,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET!
-    })
-],
-session : {
-    strategy : 'jwt'
-}
+    }),
+  ],
+  session : {
+    strategy : 'jwt' as const, 
+     generateSessionToken: () => {
+    return randomUUID()
+  }
+  }
 }
 
 export default authOptions
