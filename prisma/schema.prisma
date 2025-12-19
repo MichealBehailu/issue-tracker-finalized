@@ -6,14 +6,12 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../app/generated/prisma"
+  output   = "../generated/prisma"
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL") // MySQL connection URL
-  // For MySQL, your DATABASE_URL should look like:
-  // mysql://USER:PASSWORD@HOST:PORT/DATABASE
+  provider = "postgresql"
+  // url      = env("DATABASE_URL") 
 }
 
 model Issue {

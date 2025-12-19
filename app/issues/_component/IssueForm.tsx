@@ -2,7 +2,7 @@
 import { ErrorMessage, Spinner } from "@/app/components";
 import { IssueSchema } from "@/app/validationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Issue } from "@prisma/client";
+import { Issue } from "@/generated/prisma/client";
 import {
   Box,
   Button,
