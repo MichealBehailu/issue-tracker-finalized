@@ -19,7 +19,7 @@ export async function proxy(request: NextRequest) {
 // Routes to protect
 export const config = {
   matcher: [
-    "/issues/new",        // protect 'new issue' page
+    "/issues/new",        // protect 'new issue' page //only sigined users are able to access
     "/issues/edit/:id+"   // protect 'edit issue' page
   ]
 };
