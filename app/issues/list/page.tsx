@@ -15,6 +15,7 @@ interface Props {
 
 async function IssuesPage({ searchParams: sp }: Props) {
   const searchParams = await sp;
+
   const status = Object.values(Status).includes(searchParams.status)
     ? searchParams.status
     : undefined;
@@ -22,16 +23,21 @@ async function IssuesPage({ searchParams: sp }: Props) {
   // const status = statuses.includes((await searchParams).status)
   //   ? (await searchParams).status
   //   : undefined;
-
-  const issues = await prisma.issue.findMany({
-    where: { status: status },
-  });
   const columns: { label: string; value: keyof Issue; className?: string }[] = [
     //this is a logic just to map the header part of the table
     { label: "Issue", value: "title" },
     { label: "Status", value: "status", className: "hidden md:table-cell" },
     { label: "Created", value: "createdAt", className: "hidden md:table-cell" },
   ];
+
+  const orderBy = columns.map(column => column.value).includes(searchParams.orderBy)
+    ? { [searchParams.orderBy]: "asc" }
+    : undefined; //we check this before passing it to prisma
+
+  const issues = await prisma.issue.findMany({
+    where: { status: status },
+   orderBy
+  });
 
   return (
     <div>
