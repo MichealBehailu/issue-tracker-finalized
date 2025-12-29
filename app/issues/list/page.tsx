@@ -4,17 +4,18 @@ import { prisma } from "@/prisma/client";
 import { Table } from "@radix-ui/themes";
 import IssueStatusBatch from "../../components/IssueStatusBatch";
 import IssueAction from "./IssueAction";
+import NextLink from "next/link";
+import { ArrowUpIcon } from "@radix-ui/react-icons";
 //import { Issue, Status } from "@prisma/client";
 //import delay from "delay";
 
-
 interface Props {
-  searchParams: Promise<{ status: Status }>;
+  searchParams: Promise<{ status: Status; orderBy: keyof Issue }>;
 }
 
-async function IssuesPage ({ searchParams: sp }: Props) {
-const searchParams = await sp;
-   const status = Object.values(Status).includes(searchParams.status)
+async function IssuesPage({ searchParams: sp }: Props) {
+  const searchParams = await sp;
+  const status = Object.values(Status).includes(searchParams.status)
     ? searchParams.status
     : undefined;
   // const {status} = await searchParams
@@ -22,15 +23,14 @@ const searchParams = await sp;
   //   ? (await searchParams).status
   //   : undefined;
 
-
   const issues = await prisma.issue.findMany({
-    where: { status: status }
-  }); 
+    where: { status: status },
+  });
   const columns: { label: string; value: keyof Issue; className?: string }[] = [
     //this is a logic just to map the header part of the table
     { label: "Issue", value: "title" },
-    { label: "Issue", value: "status", className: "hidden md:table-cell" },
-    { label: "Issue", value: "createdAt", className: "hidden md:table-cell" },
+    { label: "Status", value: "status", className: "hidden md:table-cell" },
+    { label: "Created", value: "createdAt", className: "hidden md:table-cell" },
   ];
 
   return (
@@ -42,7 +42,16 @@ const searchParams = await sp;
           <Table.Row>
             {columns.map((column) => (
               <Table.ColumnHeaderCell key={column.value}>
-                {column.label}
+                <NextLink
+                  href={{
+                    query: { ...searchParams, orderBy: column.value },
+                  }}
+                >
+                  {column.label}
+                </NextLink>
+                {column.value === searchParams.orderBy && (
+                  <ArrowUpIcon className="inline" />
+                )}
               </Table.ColumnHeaderCell>
             ))}
           </Table.Row>
@@ -68,12 +77,11 @@ const searchParams = await sp;
       </Table.Root>
     </div>
   );
-};
+}
 
 export const dynamic = "force-dynamic";
 // 'auto' | 'force-dynamic' | 'error' | 'force-static'
 
 export default IssuesPage;
-
 
 //change db to pg
