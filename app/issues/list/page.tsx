@@ -45,7 +45,7 @@ async function IssuesPage({ searchParams: sp }: Props) {
 
       <Table.Root variant="surface">
         <Table.Header>
-          <Table.Row>
+          <Table.Row> 
             {columns.map((column) => (
               <Table.ColumnHeaderCell key={column.value} className={column.className}>
                 <NextLink
