@@ -1,11 +1,5 @@
 "use client";
-import {Skeleton} from '@/app/components';
-import { AiFillBug } from "react-icons/ai";
-import Link from "next/link";
-import React, { useState } from "react";
-import { usePathname } from "next/navigation";
-import classNames from "classnames"; //for checking purpose in here for the active link instead of writing conditional it is best to use the classNames from the package
-import { useSession } from "next-auth/react";
+import { Skeleton } from '@/app/components';
 import {
   Avatar,
   Box,
@@ -14,7 +8,11 @@ import {
   Flex,
   Text,
 } from "@radix-ui/themes";
-import Image from "next/image";
+import classNames from "classnames"; //for checking purpose in here for the active link instead of writing conditional it is best to use the classNames from the package
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { AiFillBug } from "react-icons/ai";
 
 const NavBar = () => {
   return (

@@ -2,7 +2,7 @@ import { Heading, Flex, Card, Text } from "@radix-ui/themes";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import IssueStatusBatch from "./IssueStatusBatch";
-import { Issue } from "@prisma/client";
+import { Issue } from "@/generated/prisma/client"
 
 const IssueDetails = ({issue} : {issue : Issue}) => {
   return (
