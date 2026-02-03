@@ -8,9 +8,16 @@ import { Box, Flex, Grid } from "@radix-ui/themes";
 import { getServerSession } from 'next-auth';
 import { notFound } from "next/navigation";
 import AssigneeSelect from './AssigneeSelect';
+import { cache } from 'react';
+
 interface Props {
   params: Promise<{ id: string }>; //In recent Next.js releases, params and searchParams in server components are asynchronous, so you have to unwrap them with await params.
 }
+
+const fetchUser = cache(async (issueId:number)=>{ //this is used to optimize; to reduce work load on our database and improve performance
+  // const id  = (await params.params).id;
+  return await prisma.issue.findUnique({where:{id: issueId}}) 
+})
 
 const IssueDetailPage = async ({ params }: Props) => {
 
@@ -22,9 +29,7 @@ const IssueDetailPage = async ({ params }: Props) => {
 
   //if (isNaN(issueId)) notFound(); //this is debatable/optional but if the user wants to access to /issues/abc it cant we direct them to notFound //NaN means not a number
 
-  const issue = await prisma.issue.findUnique({
-    where: { id: issueId },
-  });
+  const issue = await fetchUser(issueId)
 
   if (!issue) notFound();
 
@@ -46,7 +51,7 @@ const IssueDetailPage = async ({ params }: Props) => {
 };
 
 export async function generateMetadata({params}:Props){
-  const issue = await prisma.issue.findUnique({where:{id: parseInt((await params).id)}})
+  const issue = await fetchUser(parseInt((await params).id))
   return {
     title:issue?.title,
     description:"Details of issue "+issue?.id,
