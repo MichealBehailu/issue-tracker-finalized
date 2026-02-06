@@ -6,6 +6,7 @@ import Pagination from "@/app/components/Pagination";
 import { Flex } from "@radix-ui/themes";
 import IssueTable, { IssueQuery, columnNames } from "./IssueTable";
 import { Metadata } from "next";
+import { NoIssueYet } from "./NoIssueYet";
 //import { Issue, Status } from "@prisma/client";
 //import delay from "delay";
 
@@ -44,7 +45,11 @@ async function IssuesPage({ searchParams: sp }: Props) {
   return (
     <Flex direction="column" gap={"3"}>
       <IssueAction />
-      <IssueTable searchParams={sp} issues={issues} />
+      {issues.length > 0 ? (
+        <IssueTable searchParams={sp} issues={issues} />
+      ) : (
+        <NoIssueYet />
+      )}
       <Pagination
         itemCount={issueCount}
         pageSize={pageSize}

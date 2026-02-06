@@ -4,6 +4,7 @@ import LatestIssues from "./LatestIssues";
 import IssueChart from "./IssueChart";
 import { Flex, Grid } from "@radix-ui/themes";
 import { Metadata } from "next";
+import { NoIssueYet } from "./issues/list/NoIssueYet";
 
 export default async function Home() {
   // return <LatestIssues />;
@@ -21,6 +22,7 @@ export default async function Home() {
         <IssueChart open={open} closed={closed} inProgress={inProgress} />
       </Flex>
       <LatestIssues />
+      
     </Grid>
   );
 }
